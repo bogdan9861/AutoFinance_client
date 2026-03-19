@@ -1,0 +1,147 @@
+/* Карточка автомобиля (grid) */
+.car-item.grid {
+  background: rgba(25, 35, 45, 0.6);
+  backdrop-filter: blur(14px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.car-card-grid {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.car-image {
+  height: 180px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.car-image i {
+  font-size: 4rem;
+  opacity: 0.7;
+}
+
+.car-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.car-status {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.car-status[data-status="active"] {
+  color: #7ae0b0;
+}
+
+.car-status[data-status="inactive"] {
+  color: #ff8a7a;
+}
+
+.car-info {
+  padding: 20px;
+}
+
+.car-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.car-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.car-specs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.spec {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.spec i {
+  color: #ffd966;
+}
+
+.service-info {
+  margin: 15px 0;
+}
+
+.service-progress {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.service-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.service-text.urgent {
+  color: #ff4757;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.action-btn.edit:hover {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd966;
+}
+
+.action-btn.delete:hover {
+  background: rgba(255, 71, 87, 0.2);
+  color: #ff4757;
+}

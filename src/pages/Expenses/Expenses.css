@@ -1,0 +1,1061 @@
+/* ExpensesPage - основной блок */
+.expenses-page {
+  margin: 0 auto;
+  color: white;
+  min-height: 100vh;
+}
+
+/* Шапка страницы */
+.expenses-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.expenses-page__title {
+  font-size: 2.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.expenses-page__title-icon {
+  color: #ffd966;
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+}
+
+.expenses-page__header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.expenses-page__add-btn {
+  background: linear-gradient(135deg, #ffd966, #ffaa33);
+  border: none;
+  border-radius: 40px;
+  padding: 12px 24px;
+  color: #1a2f3f;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 10px 20px -5px rgba(255, 215, 0, 0.3);
+}
+
+.expenses-page__add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px -5px rgba(255, 215, 0, 0.5);
+}
+
+.expenses-page__export-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
+  padding: 12px 24px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.expenses-page__export-btn:hover {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd966;
+  transform: translateY(-2px);
+}
+
+/* Статистика */
+.expenses-page__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.expenses-page__stat-card {
+  background: rgba(30, 40, 50, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s;
+}
+
+.expenses-page__stat-card:hover {
+  transform: translateY(-5px);
+  background: rgba(40, 55, 70, 0.6);
+}
+
+.expenses-page__stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.expenses-page__stat-icon--total {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd966;
+}
+
+.expenses-page__stat-icon--count {
+  background: rgba(52, 152, 219, 0.15);
+  color: #3498db;
+}
+
+.expenses-page__stat-icon--average {
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+}
+
+.expenses-page__stat-icon--cars {
+  background: rgba(155, 89, 182, 0.15);
+  color: #9b59b6;
+}
+
+.expenses-page__stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.expenses-page__stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.expenses-page__stat-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: white;
+  line-height: 1.2;
+}
+
+/* Графики */
+.expenses-page__charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.expenses-page__chart-card {
+  background: rgba(30, 40, 50, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 32px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.expenses-page__chart-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.expenses-page__chart-title i {
+  color: #ffd966;
+}
+
+.expenses-page__category-chart,
+.expenses-page__cars-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.expenses-page__chart-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.expenses-page__chart-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expenses-page__chart-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.expenses-page__chart-label i {
+  width: 20px;
+  font-size: 1rem;
+}
+
+.expenses-page__chart-amount {
+  font-weight: 600;
+  color: #ffd966;
+}
+
+.expenses-page__progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.expenses-page__progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+.expenses-page__chart-empty {
+  text-align: center;
+  padding: 40px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+/* Фильтры */
+.expenses-page__filters {
+  background: rgba(30, 40, 50, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 32px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+}
+
+.expenses-page__search {
+  flex: 2;
+  min-width: 300px;
+  position: relative;
+}
+
+.expenses-page__search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.expenses-page__search-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
+  padding: 14px 20px 14px 48px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.expenses-page__search-input:focus {
+  outline: none;
+  border-color: #ffd966;
+  background: rgba(255, 215, 0, 0.05);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+.expenses-page__search-clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 5px;
+}
+
+.expenses-page__filter-group {
+  flex: 3;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.expenses-page__select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
+  padding: 12px 24px;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 140px;
+  flex: 1;
+}
+
+.expenses-page__select:hover {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.expenses-page__select:focus {
+  outline: none;
+  border-color: #ffd966;
+}
+
+.expenses-page__select option {
+  background: #1a2f3f;
+  color: white;
+}
+
+.expenses-page__view-toggle {
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 40px;
+  padding: 4px;
+}
+
+.expenses-page__view-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 40px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.expenses-page__view-btn--active {
+  background: #ffd966;
+  color: #1a2f3f;
+}
+
+/* Результаты поиска */
+.expenses-page__results-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.expenses-page__clear-filters {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
+  padding: 8px 16px;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.expenses-page__clear-filters:hover {
+  background: rgba(255, 71, 87, 0.15);
+  border-color: #ff4757;
+  color: #ff4757;
+}
+
+/* Список расходов */
+.expenses-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.expenses-page__date-group {
+  background: rgba(30, 40, 50, 0.3);
+  border-radius: 24px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.expenses-page__date-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px 10px 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.expenses-page__date {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.expenses-page__date-total {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffd966;
+}
+
+.expenses-page__list-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.expenses-page__list-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 215, 0, 0.2);
+}
+
+.expenses-page__item-category {
+  flex-shrink: 0;
+}
+
+.expenses-page__category-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.expenses-page__item-info {
+  flex: 1;
+}
+
+.expenses-page__item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.expenses-page__item-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
+}
+
+.expenses-page__item-amount {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffd966;
+}
+
+.expenses-page__item-details {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.expenses-page__item-details span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.expenses-page__item-details i {
+  font-size: 0.8rem;
+  color: rgba(255, 215, 0, 0.7);
+}
+
+.expenses-page__item-actions {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.expenses-page__list-item:hover .expenses-page__item-actions {
+  opacity: 1;
+}
+
+.expenses-page__item-action {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.expenses-page__item-action:hover {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd966;
+}
+
+.expenses-page__item-action--delete:hover {
+  background: rgba(255, 71, 87, 0.15);
+  color: #ff4757;
+}
+
+/* Сетка расходов */
+.expenses-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.expenses-page__grid-card {
+  background: rgba(30, 40, 50, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.expenses-page__grid-category {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+}
+
+.expenses-page__grid-content {
+  padding: 20px;
+}
+
+.expenses-page__grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.expenses-page__grid-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.expenses-page__grid-amount {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffd966;
+}
+
+.expenses-page__grid-car {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+
+.expenses-page__grid-car i {
+  color: #ffd966;
+}
+
+.expenses-page__grid-footer {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+.expenses-page__grid-footer span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Пустое состояние */
+.expenses-page__empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.expenses-page__empty-icon {
+  font-size: 5rem;
+  color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 20px;
+}
+
+.expenses-page__empty-title {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.expenses-page__empty-text {
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 20px;
+}
+
+.expenses-page__empty-btn {
+  background: linear-gradient(135deg, #ffd966, #ffaa33);
+  border: none;
+  border-radius: 40px;
+  padding: 14px 28px;
+  color: #1a2f3f;
+  font-size: 1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* Модальные окна */
+
+.expenses-page__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+}
+
+.expenses-page__delete-modal,
+.expenses-page__detail-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  background: rgba(25, 35, 45, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  z-index: 1001;
+  color: white;
+  max-width: 500px;
+  width: 90%;
+}
+
+.expenses-page__detail-modal {
+  max-width: 600px;
+}
+
+.expenses-page__delete-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: rgba(255, 71, 87, 0.15);
+  color: #ff4757;
+}
+
+.expenses-page__delete-title {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.expenses-page__delete-text {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 25px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.expenses-page__delete-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.expenses-page__delete-btn {
+  padding: 12px 28px;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.expenses-page__delete-btn--cancel {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.expenses-page__delete-btn--confirm {
+  background: #ff4757;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Детальное модальное окно */
+.expenses-page__modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.expenses-page__modal-title {
+  font-size: 1.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+}
+
+.expenses-page__modal-title-icon {
+  color: #ffd966;
+}
+
+.expenses-page__modal-close {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.expenses-page__modal-close:hover {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd966;
+}
+
+.expenses-page__modal-body {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.expenses-page__detail-category {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.expenses-page__detail-category-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.expenses-page__detail-category-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.expenses-page__detail-category-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.expenses-page__detail-category-value {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.expenses-page__detail-amount {
+  text-align: right;
+}
+
+.expenses-page__detail-amount-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+}
+
+.expenses-page__detail-amount-value {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #ffd966;
+}
+
+.expenses-page__detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.expenses-page__detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.expenses-page__detail-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.expenses-page__detail-value {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expenses-page__detail-description {
+  margin-bottom: 20px;
+}
+
+.expenses-page__detail-description-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.expenses-page__detail-description-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 16px;
+}
+
+.expenses-page__detail-receipt {
+  margin-top: 20px;
+}
+
+.expenses-page__detail-receipt-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.expenses-page__detail-receipt-image {
+  max-width: 100%;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.expenses-page__modal-footer {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.expenses-page__modal-btn {
+  padding: 12px 24px;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.expenses-page__modal-btn--edit {
+  background: #ffd966;
+  color: #1a2f3f;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expenses-page__modal-btn--delete {
+  background: rgba(255, 71, 87, 0.15);
+  color: #ff4757;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expenses-page__modal-btn--close {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .expenses-page__charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .expenses-page {
+    padding: 20px;
+  }
+
+  .expenses-page__title {
+    font-size: 2rem;
+  }
+
+  .expenses-page__header-actions {
+    width: 100%;
+  }
+
+  .expenses-page__add-btn,
+  .expenses-page__export-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .expenses-page__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .expenses-page__filters {
+    flex-direction: column;
+  }
+
+  .expenses-page__search {
+    width: 100%;
+  }
+
+  .expenses-page__filter-group {
+    width: 100%;
+  }
+
+  .expenses-page__select {
+    min-width: calc(50% - 5px);
+  }
+
+  .expenses-page__item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .expenses-page__item-actions {
+    opacity: 1;
+  }
+
+  .expenses-page__detail-category {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .expenses-page__detail-amount {
+    text-align: center;
+  }
+
+  .expenses-page__detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .expenses-page__modal-footer {
+    flex-direction: column;
+  }
+
+  .expenses-page__modal-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .expenses-page__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .expenses-page__filter-group {
+    flex-direction: column;
+  }
+
+  .expenses-page__select {
+    width: 100%;
+  }
+
+  .expenses-page__item-details {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .expenses-page__delete-actions {
+    flex-direction: column;
+  }
+
+  .expenses-page__delete-btn {
+    width: 100%;
+  }
+}
+
+/* Анимации */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.expenses-page__list-item {
+  animation: slideIn 0.3s ease-out;
+}
