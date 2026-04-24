@@ -1,8 +1,8 @@
 import axios from "axios";
-import { enums } from "../constants";
+import { enums } from "../../constants/index";
 
 const api = axios.create({
-  baseURL: "",
+  baseURL: process.env.REACT_APP_BASE_URL || "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

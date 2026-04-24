@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Expenses.css";
 import SideBar from "../../UI/components/SideBar/SideBar";
@@ -21,12 +21,75 @@ import {
   TransactionOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
+import ExpenseModal from "../../UI/widgets/ExpenseModal/ExpenseModal";
+import { getCars } from "../../app/api/endpoints/cars";
+import {
+  getExpencess,
+  removeExpencess,
+} from "../../app/api/endpoints/expencess";
+import { message, Spin } from "antd";
+
+const categories = [
+  {
+    value: "all",
+    label: "Все категории",
+    icon: <FilterOutlined />,
+    color: "#95a5a6",
+  },
+  {
+    value: "FUEL",
+    label: "Топливо",
+    icon: <i className="fas fa-gas-pump"></i>,
+    color: "#f39c12",
+  },
+  {
+    value: "MAINTANCE",
+    label: "Обслуживание",
+    icon: <ToolOutlined />,
+    color: "#3498db",
+  },
+  {
+    value: "REPAIR",
+    label: "Ремонт",
+    icon: <ToolOutlined />,
+    color: "#e74c3c",
+  },
+  {
+    value: "INSURANCE",
+    label: "Страховка",
+    icon: <FileOutlined />,
+    color: "#9b59b6",
+  },
+  {
+    value: "TAXES",
+    label: "Налоги",
+    icon: <BankOutlined />,
+    color: "#e67e22",
+  },
+  {
+    value: "PARKING",
+    label: "Парковка",
+    icon: <CarOutlined />,
+    color: "#1abc9c",
+  },
+  {
+    value: "CHARGING",
+    label: "Зарядка",
+    icon: <ThunderboltOutlined />,
+    color: "#2ecc71",
+  },
+  {
+    value: "other",
+    label: "Прочее",
+    icon: <EllipsisOutlined />,
+    color: "#7f8c8d",
+  },
+];
 
 const ExpensesPage = ({
   expenses: initialExpenses,
-  cars,
+
   onAddExpense,
-  onEditExpense,
   onDeleteExpense,
 }) => {
   const [filterPeriod, setFilterPeriod] = useState("month");
@@ -37,182 +100,16 @@ const ExpensesPage = ({
   const [viewMode, setViewMode] = useState("list");
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showExpenceInfo, setShowExpenceInfo] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [expenses, setExpenses] = useState([]);
+  const [createExpenceModalOpen, setCreateExpenceModalOpen] = useState(false);
+  const [editExpenceModalOpen, setEditExpenceModalOpen] = useState(false);
+  const [carsList, setCarsList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Пример данных расходов
-  const defaultExpenses = [
-    {
-      id: 1,
-      carId: 1,
-      carName: "Porsche Cayenne",
-      date: "2026-03-15",
-      category: "fuel",
-      amount: 4500,
-      mileage: 78400,
-      description: "АИ-95, 50л",
-      location: "Лукойл, Каширское шоссе",
-      receipt: null,
-      url: "https://e-n-cars.ru/wp-content/uploads/2024/10/porsche-cayenne-s-e1729874775649.webp",
-    },
-    {
-      id: 2,
-      carId: 1,
-      carName: "Porsche Cayenne",
-      date: "2026-03-10",
-      category: "service",
-      amount: 12500,
-      mileage: 78200,
-      description: "Замена масла и фильтров",
-      location: "Porsche Центр",
-      receipt: null,
-      url: "https://e-n-cars.ru/wp-content/uploads/2024/10/porsche-cayenne-s-e1729874775649.webp",
-    },
-    {
-      id: 3,
-      carId: 2,
-      carName: "Toyota Hilux",
-      date: "2026-03-12",
-      category: "fuel",
-      amount: 3800,
-      mileage: 112400,
-      description: "ДТ, 40л",
-      location: "Газпромнефть",
-      receipt: null,
-      url: "https://www.masmotors.ru/resources/models/97/colors/color/5_600x310.webp",
-    },
-    {
-      id: 4,
-      carId: 2,
-      carName: "Toyota Hilux",
-      date: "2026-03-05",
-      category: "repair",
-      amount: 8500,
-      mileage: 112200,
-      description: "Замена тормозных колодок",
-      location: "Toyota Сервис",
-      receipt: null,
-      url: "https://www.masmotors.ru/resources/models/97/colors/color/5_600x310.webp",
-    },
-    {
-      id: 5,
-      carId: 3,
-      carName: "Tesla Model 3",
-      date: "2026-03-14",
-      category: "charging",
-      amount: 1200,
-      mileage: 34200,
-      description: "Зарядка, Supercharger",
-      location: "МКАД, 65-й км",
-      receipt: null,
-      url: "https://e-n-cars.ru/images/products/69496a12f34ea_tesla-model-3_1.png",
-    },
-    {
-      id: 6,
-      carId: 3,
-      carName: "Tesla Model 3",
-      date: "2026-03-01",
-      category: "insurance",
-      amount: 45000,
-      mileage: 34000,
-      description: "ОСАГО + КАСКО",
-      location: "СберСтрахование",
-      receipt: null,
-      url: "https://e-n-cars.ru/images/products/69496a12f34ea_tesla-model-3_1.png",
-    },
-    {
-      id: 7,
-      carId: 1,
-      carName: "Porsche Cayenne",
-      date: "2026-02-28",
-      category: "parking",
-      amount: 3500,
-      mileage: 78000,
-      description: "Парковка в аэропорту",
-      location: "Шереметьево",
-      receipt: null,
-      url: "https://e-n-cars.ru/wp-content/uploads/2024/10/porsche-cayenne-s-e1729874775649.webp",
-    },
-    {
-      id: 8,
-      carId: 2,
-      carName: "Toyota Hilux",
-      date: "2026-02-25",
-      category: "tax",
-      amount: 8500,
-      mileage: 111800,
-      description: "Транспортный налог",
-      location: "ФНС",
-      receipt: null,
-      url: "https://www.masmotors.ru/resources/models/97/colors/color/5_600x310.webp",
-    },
-  ];
+  console.log(filterCar);
 
-  const expenses = initialExpenses || defaultExpenses;
-  const carsList = cars || [
-    { id: 1, name: "Porsche Cayenne" },
-    { id: 2, name: "Toyota Hilux" },
-    { id: 3, name: "Tesla Model 3" },
-  ];
-
-  // Категории расходов
-  const categories = [
-    {
-      value: "all",
-      label: "Все категории",
-      icon: <FilterOutlined />,
-      color: "#95a5a6",
-    },
-    {
-      value: "fuel",
-      label: "Топливо",
-      icon: <i className="fas fa-gas-pump"></i>,
-      color: "#f39c12",
-    },
-    {
-      value: "service",
-      label: "Обслуживание",
-      icon: <ToolOutlined />,
-      color: "#3498db",
-    },
-    {
-      value: "repair",
-      label: "Ремонт",
-      icon: <ToolOutlined />,
-      color: "#e74c3c",
-    },
-    {
-      value: "insurance",
-      label: "Страховка",
-      icon: <FileOutlined />,
-      color: "#9b59b6",
-    },
-    {
-      value: "tax",
-      label: "Налоги",
-      icon: <BankOutlined />,
-      color: "#e67e22",
-    },
-    {
-      value: "parking",
-      label: "Парковка",
-      icon: <CarOutlined />,
-      color: "#1abc9c",
-    },
-    {
-      value: "charging",
-      label: "Зарядка",
-      icon: <ThunderboltOutlined />,
-      color: "#2ecc71",
-    },
-    {
-      value: "other",
-      label: "Прочее",
-      icon: <EllipsisOutlined />,
-      color: "#7f8c8d",
-    },
-  ];
-
-  // Периоды для фильтрации
   const periods = [
     { value: "week", label: "Неделя" },
     { value: "month", label: "Месяц" },
@@ -221,7 +118,39 @@ const ExpensesPage = ({
     { value: "all", label: "Все время" },
   ];
 
-  // Получение иконки категории
+  useEffect(() => {
+    setLoading(true);
+
+    getExpencess()
+      .then((res) => {
+        setExpenses(res.data);
+      })
+      .catch((e) => {
+        message.error(
+          `Не удалось получить список расходов ${e.respose.data.message}`
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    getCars()
+      .then((res) => {
+        setCarsList(
+          res.data.map((c) => ({
+            ...c,
+            id: c.id,
+            name: `${c.mark} ${c.model}`,
+          }))
+        );
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
   const getCategoryIcon = (categoryValue) => {
     const category = categories.find((c) => c.value === categoryValue);
     return category ? category.icon : "fa-receipt";
@@ -256,18 +185,17 @@ const ExpensesPage = ({
         const matchesPeriod =
           filterPeriod === "all" || expenseDate >= filterDate;
         const matchesCategory =
-          filterCategory === "all" || expense.category === filterCategory;
-        const matchesCar =
-          filterCar === "all" || expense.carId === parseInt(filterCar);
+          filterCategory === "all" || expense.type === filterCategory;
+        const matchesCar = filterCar === "all" || expense.auto.id === filterCar;
 
         const matchesSearch =
           searchTerm === "" ||
           expense.description
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          expense.carName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (expense.location &&
-            expense.location.toLowerCase().includes(searchTerm.toLowerCase()));
+            ?.toLowerCase()
+            ?.includes(searchTerm?.toLowerCase()) ||
+          expense.auto.mark.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (expense.place &&
+            expense.place.toLowerCase().includes(searchTerm.toLowerCase()));
 
         return matchesPeriod && matchesCategory && matchesCar && matchesSearch;
       })
@@ -278,9 +206,9 @@ const ExpensesPage = ({
           case "date-asc":
             return new Date(a.date) - new Date(b.date);
           case "amount-desc":
-            return b.amount - a.amount;
+            return b.price - a.price;
           case "amount-asc":
-            return a.amount - b.amount;
+            return a.price - b.price;
           default:
             return 0;
         }
@@ -289,14 +217,14 @@ const ExpensesPage = ({
 
   // Статистика расходов
   const stats = useMemo(() => {
-    const total = filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+    const total = filteredExpenses.reduce((sum, exp) => sum + exp.price, 0);
     const byCategory = categories
       .slice(1)
       .map((cat) => ({
         ...cat,
         total: filteredExpenses
-          .filter((exp) => exp.category === cat.value)
-          .reduce((sum, exp) => sum + exp.amount, 0),
+          .filter((exp) => exp.type === cat.value)
+          .reduce((sum, exp) => sum + exp.price, 0),
       }))
       .filter((cat) => cat.total > 0);
 
@@ -305,7 +233,7 @@ const ExpensesPage = ({
         ...car,
         total: filteredExpenses
           .filter((exp) => exp.carId === car.id)
-          .reduce((sum, exp) => sum + exp.amount, 0),
+          .reduce((sum, exp) => sum + exp.price, 0),
       }))
       .filter((car) => car.total > 0);
 
@@ -361,6 +289,17 @@ const ExpensesPage = ({
     );
   }, [filteredExpenses]);
 
+  const removeExpence = (id) => {
+    setExpenses((prev) => prev.filter((e) => e.id !== id));
+    removeExpencess(id)
+      .then((res) => {
+        message.success("Расход удалён");
+      })
+      .catch((e) => {
+        message.error(`Не удалось удалить расход ${e?.respose?.data?.message}`);
+      });
+  };
+
   return (
     <motion.div
       className="app expenses-page gap-20"
@@ -388,14 +327,10 @@ const ExpensesPage = ({
           >
             <button
               className="expenses-page__add-btn"
-              onClick={() => setShowAddModal(true)}
+              onClick={() => setCreateExpenceModalOpen(true)}
             >
               <i className="fas fa-plus-circle"></i>
               Добавить расход
-            </button>
-            <button className="expenses-page__export-btn">
-              <i className="fas fa-download"></i>
-              Экспорт
             </button>
           </motion.div>
         </div>
@@ -695,185 +630,211 @@ const ExpensesPage = ({
         </div>
 
         {/* Список расходов */}
-        <AnimatePresence mode="wait">
-          {filteredExpenses.length === 0 ? (
-            <motion.div
-              className="expenses-page__empty"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-            >
-              <i className="fas fa-receipt expenses-page__empty-icon"></i>
-              <h3 className="expenses-page__empty-title">Расходы не найдены</h3>
-              <p className="expenses-page__empty-text">
-                Попробуйте изменить параметры фильтрации
-              </p>
-              <button
-                className="expenses-page__empty-btn"
-                onClick={() => setShowAddModal(true)}
+
+        {loading ? (
+          <Spin />
+        ) : (
+          <AnimatePresence mode="wait">
+            {filteredExpenses.length === 0 ? (
+              <motion.div
+                className="expenses-page__empty"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
               >
-                <i className="fas fa-plus-circle"></i>
-                Добавить первый расход
-              </button>
-            </motion.div>
-          ) : viewMode === "list" ? (
-            <div className="expenses-page__list">
-              {groupedExpenses.map(([date, dayExpenses]) => (
-                <motion.div
-                  key={date}
-                  className="expenses-page__date-group"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                <i className="fas fa-receipt expenses-page__empty-icon"></i>
+                <h3 className="expenses-page__empty-title">
+                  Расходы не найдены
+                </h3>
+                <p className="expenses-page__empty-text">
+                  Попробуйте изменить параметры фильтрации
+                </p>
+                <button
+                  className="expenses-page__empty-btn"
+                  onClick={() => setCreateExpenceModalOpen(true)}
                 >
-                  <div className="expenses-page__date-header">
-                    <span className="expenses-page__date">
-                      {formatDate(date)}
-                    </span>
-                    <span className="expenses-page__date-total">
-                      {formatAmount(
-                        dayExpenses.reduce((sum, exp) => sum + exp.amount, 0)
-                      )}
-                    </span>
-                  </div>
+                  <i className="fas fa-plus-circle"></i>
+                  Добавить первый расход
+                </button>
+              </motion.div>
+            ) : viewMode === "list" ? (
+              <div className="expenses-page__list">
+                {groupedExpenses.map(([date, dayExpenses]) => (
+                  <motion.div
+                    key={date}
+                    className="expenses-page__date-group"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <div className="expenses-page__date-header">
+                      <span className="expenses-page__date">
+                        {formatDate(date)}
+                      </span>
+                      <span className="expenses-page__date-total">
+                        {formatAmount(
+                          dayExpenses.reduce((sum, exp) => sum + exp.price, 0)
+                        )}
+                      </span>
+                    </div>
 
-                  {dayExpenses.map((expense, index) => (
-                    <motion.div
-                      key={expense.id}
-                      className="expenses-page__list-item"
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileHover={{ scale: 1.01, x: 5 }}
-                      onClick={() => setSelectedExpense(expense)}
-                    >
-                      <div className="expenses-page__item-category">
-                        <div
-                          className="expenses-page__category-icon"
-                          style={{
-                            backgroundColor:
-                              getCategoryColor(expense.category) + "20",
-                          }}
-                        >
-                          <i
-                            className={`fas ${getCategoryIcon(
-                              expense.category
-                            )}`}
+                    {dayExpenses.map((expense, index) => (
+                      <motion.div
+                        key={expense.id}
+                        className="expenses-page__list-item"
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: index * 0.05 }}
+                        whileHover={{ scale: 1.01, x: 5 }}
+                        onClick={() => setSelectedExpense(expense)}
+                      >
+                        <div className="expenses-page__item-category">
+                          <div
+                            className="expenses-page__category-icon"
                             style={{
-                              color: getCategoryColor(expense.category),
+                              backgroundColor:
+                                getCategoryColor(expense.type) + "20",
                             }}
-                          ></i>
-                        </div>
-                      </div>
-
-                      <div className="expenses-page__item-info">
-                        <div className="expenses-page__item-header">
-                          <span className="expenses-page__item-title">
-                            {expense.description}
-                          </span>
-                          <span className="expenses-page__item-amount">
-                            {formatAmount(expense.amount)}
-                          </span>
+                          >
+                            <i
+                              className={`fas ${getCategoryIcon(expense.type)}`}
+                              style={{
+                                color: getCategoryColor(expense.type),
+                              }}
+                            >
+                              {getCategoryIcon(expense.type)}
+                            </i>
+                          </div>
                         </div>
 
-                        <div className="expenses-page__item-details">
-                          <span className="expenses-page__item-car">
-                            <i className="fas fa-car"></i>
-                            {expense.carName}
-                          </span>
-                          <span className="expenses-page__item-mileage">
-                            <i className="fas fa-road"></i>
-                            {expense.mileage} км
-                          </span>
-                          {expense.location && (
-                            <span className="expenses-page__item-location">
-                              <i className="fas fa-map-marker-alt"></i>
-                              {expense.location}
+                        <div className="expenses-page__item-info">
+                          <div className="expenses-page__item-header">
+                            <span className="expenses-page__item-title">
+                              {expense.description ||
+                                getCategoryLabel(expense.type)}
                             </span>
-                          )}
-                        </div>
-                      </div>
+                            <span className="expenses-page__item-amount">
+                              {formatAmount(expense.price)}
+                            </span>
+                          </div>
 
-                      <div className="expenses-page__item-actions">
-                        <button
-                          className="expenses-page__item-action"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEditExpense && onEditExpense(expense);
-                          }}
-                        >
-                          <i className="fas fa-edit"></i>
-                        </button>
-                        <button
-                          className="expenses-page__item-action expenses-page__item-action--delete"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedExpense(expense);
-                            setShowDeleteConfirm(true);
-                          }}
-                        >
-                          <i className="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="expenses-page__grid">
-              {filteredExpenses.map((expense, index) => (
-                <motion.div
-                  key={expense.id}
-                  className="expenses-page__grid-card"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  onClick={() => setSelectedExpense(expense)}
-                >
-                  <div
-                    className="expenses-page__grid-category"
-                    style={{
-                      backgroundColor: getCategoryColor(expense.category),
+                          <div className="expenses-page__item-details">
+                            <span className="expenses-page__item-car">
+                              <i className="fas fa-car"></i>
+                              {expense.auto.mark} {expense.auto.model}
+                            </span>
+                            <span className="expenses-page__item-mileage">
+                              <i className="fas fa-road"></i>
+                              {expense.auto.mileageKM} км
+                            </span>
+                            {expense.place && (
+                              <span className="expenses-page__item-location">
+                                <i className="fas fa-map-marker-alt"></i>
+                                {expense.place}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="expenses-page__item-actions">
+                          <button
+                            className="expenses-page__item-action"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditExpenceModalOpen(true);
+                              setSelectedExpense(expense);
+                            }}
+                          >
+                            <i className="fas fa-edit"></i>
+                          </button>
+                          <button
+                            className="expenses-page__item-action expenses-page__item-action--delete"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedExpense(expense);
+                              setShowDeleteConfirm(true);
+                            }}
+                          >
+                            <i className="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="expenses-page__grid">
+                {filteredExpenses.map((expense, index) => (
+                  <motion.div
+                    key={expense.id}
+                    className="expenses-page__grid-card"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    onClick={() => {
+                      setSelectedExpense(expense);
+                      setShowExpenceInfo(true);
                     }}
                   >
-                    <i
-                      className={`fas ${getCategoryIcon(expense.category)}`}
-                    ></i>
-                  </div>
-
-                  <div className="expenses-page__grid-content">
-                    <div className="expenses-page__grid-header">
-                      <span className="expenses-page__grid-title">
-                        {expense.description}
-                      </span>
-                      <span className="expenses-page__grid-amount">
-                        {formatAmount(expense.amount)}
-                      </span>
+                    <div
+                      className="expenses-page__grid-category"
+                      style={{
+                        backgroundColor: getCategoryColor(expense.type),
+                      }}
+                    >
+                      <i className={`fas ${getCategoryIcon(expense.type)}`}></i>
                     </div>
 
-                    <div className="expenses-page__grid-car">
-                      <CarOutlined />
-                      {expense.carName}
-                    </div>
+                    <div className="expenses-page__grid-content">
+                      <div className="expenses-page__grid-header">
+                        <span className="expenses-page__grid-title">
+                          {expense.description ||
+                            getCategoryLabel(expense.type)}
+                        </span>
+                        <span className="expenses-page__grid-amount">
+                          {formatAmount(expense.price)}
+                        </span>
+                      </div>
 
-                    <div className="expenses-page__grid-footer">
-                      <span className="expenses-page__grid-date">
-                        <CalendarOutlined />
-                        {formatShortDate(expense.date)}
-                      </span>
-                      <span className="expenses-page__grid-mileage">
-                        <ClockCircleOutlined />
-                        {expense.mileage} км
-                      </span>
+                      <div className="expenses-page__grid-car">
+                        <CarOutlined />
+                        {expense.auto.mark}
+                      </div>
+
+                      <div className="expenses-page__grid-footer">
+                        <span className="expenses-page__grid-date">
+                          <CalendarOutlined />
+                          {formatShortDate(expense.date)}
+                        </span>
+                        <span className="expenses-page__grid-mileage">
+                          <ClockCircleOutlined />
+                          {expense.auto.mileageKM} км
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </AnimatePresence>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </AnimatePresence>
+        )}
+
+        <ExpenseModal
+          isOpen={createExpenceModalOpen}
+          onClose={() => setCreateExpenceModalOpen(false)}
+          cars={carsList}
+          setExpenses={setExpenses}
+        />
+
+        <ExpenseModal
+          isOpen={editExpenceModalOpen}
+          onClose={() => setEditExpenceModalOpen(false)}
+          expense={selectedExpense}
+          cars={carsList}
+          setExpenses={setExpenses}
+        />
 
         {/* Модальное окно подтверждения удаления */}
         <AnimatePresence>
@@ -896,7 +857,7 @@ const ExpensesPage = ({
                 <p className="expenses-page__delete-text">
                   Вы уверены, что хотите удалить расход{" "}
                   <strong>«{selectedExpense.description}»</strong> на сумму{" "}
-                  {formatAmount(selectedExpense.amount)}? Это действие нельзя
+                  {formatAmount(selectedExpense.price)}? Это действие нельзя
                   отменить.
                 </p>
                 <div className="expenses-page__delete-actions">
@@ -909,7 +870,7 @@ const ExpensesPage = ({
                   <button
                     className="expenses-page__delete-btn expenses-page__delete-btn--confirm"
                     onClick={() => {
-                      onDeleteExpense && onDeleteExpense(selectedExpense.id);
+                      removeExpence(selectedExpense.id);
                       setShowDeleteConfirm(false);
                     }}
                   >
@@ -924,7 +885,7 @@ const ExpensesPage = ({
 
         {/* Детальная информация о расходе */}
         <AnimatePresence>
-          {selectedExpense && !showDeleteConfirm && (
+          {selectedExpense && showExpenceInfo && (
             <>
               <div
                 className="expenses-page__modal-overlay"
@@ -956,17 +917,17 @@ const ExpensesPage = ({
                       className="expenses-page__detail-category-icon"
                       style={{
                         backgroundColor:
-                          getCategoryColor(selectedExpense.category) + "20",
+                          getCategoryColor(selectedExpense.type) + "20",
                       }}
                     >
-                      {getCategoryIcon(selectedExpense.category)}
+                      {getCategoryIcon(selectedExpense.type)}
                     </div>
                     <div className="expenses-page__detail-category-info">
                       <span className="expenses-page__detail-category-label">
                         Категория
                       </span>
                       <span className="expenses-page__detail-category-value">
-                        {getCategoryLabel(selectedExpense.category)}
+                        {getCategoryLabel(selectedExpense.type)}
                       </span>
                     </div>
                     <div className="expenses-page__detail-amount">
@@ -974,7 +935,7 @@ const ExpensesPage = ({
                         Сумма
                       </span>
                       <span className="expenses-page__detail-amount-value">
-                        {formatAmount(selectedExpense.amount)}
+                        {formatAmount(selectedExpense.price)}
                       </span>
                     </div>
                   </div>
@@ -986,7 +947,7 @@ const ExpensesPage = ({
                       </span>
                       <span className="expenses-page__detail-value">
                         <i className="fas fa-car"></i>
-                        {selectedExpense.carName}
+                        {selectedExpense.auto.mark} {selectedExpense.auto.model}
                       </span>
                     </div>
 
@@ -1004,7 +965,7 @@ const ExpensesPage = ({
                       </span>
                       <span className="expenses-page__detail-value">
                         <i className="fas fa-road"></i>
-                        {selectedExpense.mileage} км
+                        {selectedExpense.auto.mileageKM} км
                       </span>
                     </div>
 
@@ -1012,7 +973,7 @@ const ExpensesPage = ({
                       <span className="expenses-page__detail-label">Место</span>
                       <span className="expenses-page__detail-value">
                         <i className="fas fa-map-marker-alt"></i>
-                        {selectedExpense.location || "—"}
+                        {selectedExpense.place || "—"}
                       </span>
                     </div>
                   </div>
@@ -1025,19 +986,6 @@ const ExpensesPage = ({
                       {selectedExpense.description}
                     </p>
                   </div>
-
-                  {selectedExpense.receipt && (
-                    <div className="expenses-page__detail-receipt">
-                      <span className="expenses-page__detail-receipt-label">
-                        Чек
-                      </span>
-                      <img
-                        src={selectedExpense.receipt}
-                        alt="Receipt"
-                        className="expenses-page__detail-receipt-image"
-                      />
-                    </div>
-                  )}
                 </div>
 
                 <div className="expenses-page__modal-footer">

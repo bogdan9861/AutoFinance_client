@@ -8,6 +8,7 @@ import ServicePage from "./pages/Service/Service";
 import SettingsPage from "./pages/Settings/Settings";
 import AuthPage from "./pages/Auth/Auth";
 
+
 const { darkAlgorithm } = theme;
 
 function App() {

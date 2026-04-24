@@ -8,13 +8,22 @@ import {
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useHref, useNavigate } from "react-router-dom";
+import { enums } from "../../../constants";
+import useUser from "../../../hooks/useUser";
 
 const SideBar = () => {
   const routeName = useHref();
   const [activeNav, setActiveNav] = useState(routeName);
   const navigate = useNavigate();
+  const { user } = useUser();
 
-  console.log(routeName);
+  useEffect(() => {
+    const token = localStorage.getItem(enums.TOKEN);
+
+    if (!token) {
+      navigate("/auth");
+    }
+  }, []);
 
   const navItems = [
     {
@@ -74,8 +83,8 @@ const SideBar = () => {
               <i className="fas fa-user"></i>
             </div>
             <div className="user-details">
-              <span className="user-name">Александр</span>
-              <span className="user-role">Владелец</span>
+              <span className="user-name">{user?.name}</span>
+              <span className="user-role">{user?.email}</span>
             </div>
           </div>
         </div>
