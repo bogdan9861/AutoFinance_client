@@ -3,7 +3,9 @@ import {
   CarOutlined,
   CreditCardOutlined,
   DashboardOutlined,
+  MoonOutlined,
   SettingOutlined,
+  SunOutlined,
   ToolOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
@@ -16,6 +18,37 @@ const SideBar = () => {
   const [activeNav, setActiveNav] = useState(routeName);
   const navigate = useNavigate();
   const { user } = useUser();
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    const theme = localStorage.getItem(enums.THEME);
+
+    setTheme(theme);
+  }, []);
+
+  const toggleTheme = () => {
+    localStorage.setItem(enums.THEME, theme === "light" ? "dark" : "light");
+
+    const toggleTheme = window.dispatchEvent(
+      new CustomEvent("themeChanged", {
+        detail: {
+          key: enums.THEME,
+          newValue: theme === "light" ? "dark" : "light",
+          url: window.location.href,
+        },
+      }),
+    );
+
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  useEffect(() => {
+    if (theme === "light") {
+      document.body.style.filter = "invert()";
+    } else {
+      document.body.style.filter = "";
+    }
+  }, [theme]);
 
   useEffect(() => {
     const token = localStorage.getItem(enums.TOKEN);
@@ -51,6 +84,13 @@ const SideBar = () => {
       icon: <SettingOutlined />,
       link: "/settings",
     },
+    {
+      id: "theme",
+      label: "Тема",
+      icon: theme === "dark" ? <SunOutlined /> : <MoonOutlined />,
+
+      onClick: toggleTheme,
+    },
   ];
 
   return (
@@ -66,6 +106,10 @@ const SideBar = () => {
             key={item.id}
             className={`nav-item ${routeName === item.link ? "active" : ""}`}
             onClick={() => {
+              if (item.onClick) {
+                item.onClick();
+                return;
+              }
               setActiveNav(item.id);
               navigate(item.link);
             }}

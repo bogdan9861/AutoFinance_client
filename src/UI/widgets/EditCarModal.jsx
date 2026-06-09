@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import "../../pages/Cars/Cars.css";
 import { editCars, getCars, updateCar } from "../../app/api/endpoints/cars";
 import { Spin, message } from "antd";
+import Image from "../components/Image/Image";
 
 const EditCarModal = ({
   open,
@@ -128,8 +129,8 @@ const EditCarModal = ({
         // Обновляем список автомобилей
         setCars((prev) =>
           prev.map((car) =>
-            car.id === editingCar.id ? { ...car, ...response.data } : car
-          )
+            car.id === editingCar.id ? { ...car, ...response.data } : car,
+          ),
         );
 
         message.success("Автомобиль успешно обновлен");
@@ -173,7 +174,7 @@ const EditCarModal = ({
                   <div className="cars-page__avatar-upload">
                     <div className="cars-page__avatar-preview">
                       {editForm.imagePreview ? (
-                        <img
+                        <Image
                           src={editForm.imagePreview}
                           alt="Preview"
                           className="cars-page__avatar-preview-image"

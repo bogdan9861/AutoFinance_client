@@ -11,6 +11,7 @@ import {
 import { message, Spin } from "antd";
 import { enums } from "../../constants";
 import { useNavigate } from "react-router";
+import Image from "../../UI/components/Image/Image";
 
 const SettingsPage = ({ onUpdateProfile, onChangePassword }) => {
   const { user, loading: userLoading } = useUser();
@@ -308,7 +309,7 @@ const SettingsPage = ({ onUpdateProfile, onChangePassword }) => {
               <div className="settings-page__user-card">
                 <div className="settings-page__avatar">
                   {profileForm.avatarPreview ? (
-                    <img
+                    <Image
                       src={profileForm.avatarPreview}
                       alt={profileForm.name}
                       className="settings-page__avatar-image"
@@ -417,7 +418,7 @@ const SettingsPage = ({ onUpdateProfile, onChangePassword }) => {
                         <div className="settings-page__avatar-upload">
                           <div className="settings-page__avatar-preview">
                             {profileForm.avatarPreview ? (
-                              <img
+                              <Image
                                 src={profileForm.avatarPreview}
                                 alt="Avatar"
                                 className="settings-page__avatar-preview-image"

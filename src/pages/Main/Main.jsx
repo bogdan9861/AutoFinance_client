@@ -44,7 +44,7 @@ const Main = () => {
         setStatistics(res.data);
       })
       .catch((e) => {
-        message.error("Ошибка получения статистики");
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -109,10 +109,10 @@ const Main = () => {
                           i === 0
                             ? "fa-credit-card"
                             : stat.id === 1
-                            ? "fa-gas-pump"
-                            : stat.id === 2
-                            ? "fa-wrench"
-                            : "fa-car"
+                              ? "fa-gas-pump"
+                              : stat.id === 2
+                                ? "fa-wrench"
+                                : "fa-car"
                         }`}
                       ></i>
                       {stat.label}

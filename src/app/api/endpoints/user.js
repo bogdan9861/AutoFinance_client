@@ -24,6 +24,10 @@ export const editUser = async (data) => {
   });
 };
 
-export const removeUser = async () => {
-  return await api.delete("/users/");
+export const getAllUsers = async () => {
+  return await api.get(`/users/all`);
+};
+
+export const removeUser = async (id) => {
+  return await api.delete(`/users/${id}`);
 };

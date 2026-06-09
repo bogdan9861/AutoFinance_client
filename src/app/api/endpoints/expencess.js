@@ -1,11 +1,13 @@
 import api from "..";
 
 export const createExpencess = async (data) => {
-  return await api.post("/expencess", data);
+  return await api.post("/expencess", data, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 };
 
 export const editExpencess = async (id, data) => {
-  return await api.put(`/expencess/${id}`, data);
+  return await api.put(`/expencess/${id}`, data, {headers: {"Content-Type": 'multipart/form-data'}});
 };
 
 export const removeExpencess = async (id) => {

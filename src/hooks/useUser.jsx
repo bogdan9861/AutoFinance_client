@@ -3,7 +3,7 @@ import { currentUser } from "../app/api/endpoints/user";
 
 const useUser = () => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) return;

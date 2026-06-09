@@ -24,6 +24,7 @@ import {
 import { Spin, message } from "antd";
 import EditCarModal from "../../UI/widgets/EditCarModal";
 import AddCarModal from "../../UI/widgets/AddCarModal/AddCarModal";
+import Image from "../../UI/components/Image/Image";
 
 const CarsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -442,7 +443,7 @@ const CarsPage = () => {
                             style={{ backgroundColor: car.color + "20" }}
                           >
                             {car.image ? (
-                              <img
+                              <Image
                                 src={car.image}
                                 alt={car.mark}
                                 className="cars-page__grid-img"
@@ -551,7 +552,7 @@ const CarsPage = () => {
                             style={{ backgroundColor: car.color + "20" }}
                           >
                             {car.image ? (
-                              <img
+                              <Image
                                 src={car.image}
                                 alt={car.mark}
                                 className="cars-page__list-img"
@@ -767,7 +768,7 @@ const CarsPage = () => {
                       style={{ backgroundColor: selectedCar.color + "20" }}
                     >
                       {selectedCar.image ? (
-                        <img
+                        <Image
                           src={selectedCar.image}
                           alt={selectedCar.mark}
                           className="cars-page__detail-img"

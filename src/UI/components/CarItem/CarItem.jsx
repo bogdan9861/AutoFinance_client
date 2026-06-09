@@ -1,9 +1,10 @@
 import React from "react";
+import Image from "../Image/Image";
 
 const CarItem = ({ car }) => {
   return (
     <div key={car.id} className="car-card">
-      <img
+      <Image
         className="car-image"
         style={{ objectFit: "cover", objectPosition: "left" }}
         src={car.image}
@@ -30,7 +31,7 @@ const CarItem = ({ car }) => {
             className="progress-fill"
             style={{
               width: `${Math.round(
-                (car.distanceCovered / car.maintanceDistance) * 100
+                (car.distanceCovered / car.maintanceDistance) * 100,
               )}%`,
             }}
           ></div>

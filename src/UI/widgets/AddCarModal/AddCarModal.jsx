@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./AddCarModal.css";
 import { createCars } from "../../../app/api/endpoints/cars";
 import { message } from "antd";
+import Image from "../../components/Image/Image";
 
 const AddCarModal = ({ open, onClose, loading: externalLoading, setCars }) => {
   const [formData, setFormData] = useState({
@@ -372,7 +373,7 @@ const AddCarModal = ({ open, onClose, loading: externalLoading, setCars }) => {
                         <div className="add-car-modal__avatar-upload">
                           <div className="add-car-modal__avatar-preview">
                             {formData.imagePreview ? (
-                              <img
+                              <Image
                                 src={formData.imagePreview}
                                 alt="Preview"
                                 className="add-car-modal__avatar-image"

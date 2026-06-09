@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./ExpenseModal.css";
 import {
@@ -24,6 +24,13 @@ const ExpenseModal = ({
     description: "",
     autoId: "",
   });
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [existingFile, setExistingFile] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const [isFileRemoved, setIsFileRemoved] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -76,7 +83,15 @@ const ExpenseModal = ({
       description: "",
       autoId: cars.length === 1 ? cars[0].id : "",
     });
+    setSelectedFile(null);
+    setExistingFile(null);
+    setFilePreview(null);
+    setFileName("");
+    setIsFileRemoved(false);
     setErrors({});
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   useEffect(() => {
@@ -91,9 +106,28 @@ const ExpenseModal = ({
         description: expense.description || "",
         autoId: expense.autoId || "",
       });
+
+      // Если у расхода есть файл, отображаем его
+      if (expense.fileUrl) {
+        const fileData = {
+          name: expense.fileName || expense.originalName || "Путевой лист",
+          url: expense.fileUrl || expense.filePath,
+          type: expense.fileType || "application/octet-stream",
+          size: expense.fileSize || null,
+        };
+        setExistingFile(fileData);
+        setFileName(fileData.name);
+
+        setFilePreview(fileData.url);
+      } else {
+        setExistingFile(null);
+        setFileName("");
+        setFilePreview(null);
+      }
+
+      setIsFileRemoved(false);
       setErrors({});
     } else if (!expense && isOpen) {
-      // Сброс формы при создании нового расхода
       clearFields();
     }
   }, [expense, isOpen]);
@@ -101,16 +135,79 @@ const ExpenseModal = ({
   // Обработка изменения полей
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // Очищаем ошибку для этого поля
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[name];
         return newErrors;
       });
+    }
+  };
+
+  // Обработка выбора файла
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        message.error("Размер файла не должен превышать 10MB");
+        return;
+      }
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "application/pdf",
+        "text/plain",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        message.error("Неподдерживаемый тип файла");
+        return;
+      }
+
+      setSelectedFile(file);
+      setExistingFile(null);
+      setFileName(file.name);
+      setIsFileRemoved(false);
+
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFilePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setFilePreview(null);
+      }
+    }
+  };
+
+  // Удаление выбранного файла
+  const handleRemoveFile = () => {
+    setSelectedFile(null);
+    setExistingFile(null);
+    setFilePreview(null);
+    setFileName("");
+    setIsFileRemoved(true);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // Просмотр файла в новом окне
+  const handleViewFile = () => {
+    if (existingFile?.url) {
+      window.open(existingFile.url, "_blank");
+    } else if (filePreview) {
+      const link = document.createElement("a");
+      link.href = filePreview;
+      link.download = fileName;
+      link.click();
     }
   };
 
@@ -147,48 +244,56 @@ const ExpenseModal = ({
     if (Object.keys(newErrors).length === 0) {
       setLoading(true);
 
-      const submitData = {
-        price: parseInt(formData.price),
-        type: formData.type,
-        date: new Date(formData.date).toISOString(),
-        place: formData.place || null,
-        description: formData.description || null,
-        autoId: formData.autoId,
-      };
+      const requestFormData = new FormData();
+
+      requestFormData.append("price", formData.price);
+      requestFormData.append("type", formData.type);
+      requestFormData.append("date", new Date(formData.date).toISOString());
+      requestFormData.append("place", formData.place || "");
+      requestFormData.append("description", formData.description || "");
+      requestFormData.append("autoId", formData.autoId);
+
+      if (selectedFile) {
+        requestFormData.append("file", selectedFile);
+      }
+
+      // Если файл был удален при редактировании
+      if (isFileRemoved && isEditing) {
+        requestFormData.append("removeFile", "true");
+      }
 
       if (!isEditing) {
-        createExpencess(submitData)
+        createExpencess(requestFormData)
           .then((res) => {
             console.log(res.data);
-
             setExpenses((prev) => [res.data, ...prev]);
             onClose();
             message.success("Расход добавлен");
+            clearFields();
           })
           .catch((e) => {
             console.dir(e);
-
             message.error(
-              `Ошибка создания создания расхода ${e?.response?.data?.message}`
+              `Ошибка создания расхода ${e?.response?.data?.message || ""}`,
             );
           })
           .finally(() => {
             setLoading(false);
           });
       } else {
-        editExpencess(expense?.id, submitData)
+        editExpencess(expense?.id, requestFormData)
           .then((res) => {
             setExpenses((prev) => [
               res.data,
               ...prev.filter((e) => e.id !== expense.id),
             ]);
-
             message.success("Расход изменён");
             onClose();
+            clearFields();
           })
           .catch((e) => {
             message.error(
-              `Не удалось изменить расход ${e?.response?.data?.message}`
+              `Не удалось изменить расход ${e?.response?.data?.message || ""}`,
             );
           })
           .finally(() => {
@@ -254,7 +359,6 @@ const ExpenseModal = ({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Затемнение фона */}
           <motion.div
             className="expense-modal__overlay"
             variants={overlayVariants}
@@ -267,7 +371,6 @@ const ExpenseModal = ({
             }}
           />
 
-          {/* Модальное окно */}
           <motion.div
             className="expense-modal"
             variants={modalVariants}
@@ -296,7 +399,6 @@ const ExpenseModal = ({
 
             <form onSubmit={handleSubmit} className="expense-modal__form">
               <div className="expense-modal__body">
-                {/* Выбор автомобиля */}
                 <div className="expense-modal__form-group">
                   <label className="expense-modal__label">
                     <i className="fas fa-car"></i>
@@ -440,39 +542,78 @@ const ExpenseModal = ({
                   />
                 </div>
 
-                {/* Информация о выбранном типе */}
-                {formData.type && (
-                  <div className="expense-modal__info">
-                    <div
-                      className="expense-modal__info-icon"
-                      style={{
-                        backgroundColor: getTypeColor(formData.type) + "20",
-                      }}
+                <div className="expense-modal__form-group">
+                  <label className="expense-modal__label">
+                    <i className="fas fa-paperclip"></i>
+                    Прикрепить путевой лист
+                  </label>
+                  <div className="expense-modal__file-area">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      id="file-upload"
+                      className="expense-modal__file-input"
+                      onChange={handleFileChange}
+                      disabled={loading || externalLoading}
+                      accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt"
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="expense-modal__file-label"
                     >
-                      <i
-                        className={`fas ${getTypeIcon(formData.type)}`}
-                        style={{ color: getTypeColor(formData.type) }}
-                      ></i>
-                    </div>
-                    <div className="expense-modal__info-text">
-                      <span className="expense-modal__info-type">
-                        {getTypeLabel(formData.type)}
-                      </span>
-                      {formData.price && (
-                        <span className="expense-modal__info-price">
-                          {formatPrice(formData.price)} ₽
-                        </span>
-                      )}
-                    </div>
+                      <i className="fas fa-cloud-upload-alt"></i>
+                      <span>Выберите файл или перетащите его сюда</span>
+                      <small>
+                        Поддерживаются: JPG, PNG, PDF, DOC, TXT (макс. 10MB)
+                      </small>
+                    </label>
                   </div>
-                )}
+
+                  {/* Отображение файла (нового или существующего) */}
+                  {(fileName || existingFile) && (
+                    <div className="expense-modal__file-info">
+                      <div className="expense-modal__file-details">
+                        <i
+                          className={`fas ${filePreview ? "fa-file-image" : "fa-file"}`}
+                        ></i>
+                        <span className="expense-modal__file-name">
+                          {fileName}
+                        </span>
+                        <div className="expense-modal__file-actions">
+                          {filePreview && (
+                            <button
+                              type="button"
+                              className="expense-modal__file-view"
+                              onClick={handleViewFile}
+                              title="Просмотреть"
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            className="expense-modal__file-remove"
+                            onClick={handleRemoveFile}
+                            disabled={loading || externalLoading}
+                            title="Удалить"
+                          >
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="expense-modal__footer">
                 <button
                   type="button"
                   className="expense-modal__btn expense-modal__btn--secondary"
-                  onClick={onClose}
+                  onClick={() => {
+                    onClose();
+                    clearFields();
+                  }}
                   disabled={loading || externalLoading}
                 >
                   Отмена

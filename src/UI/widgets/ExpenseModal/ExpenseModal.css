@@ -317,3 +317,313 @@ input[type="number"].expense-modal__input::-webkit-outer-spin-button {
     align-items: flex-start;
   }
 }
+
+/* Стили для файлового поля */
+.expense-modal__file-area {
+  position: relative;
+  margin-top: 5px;
+}
+
+.expense-modal__file-input {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.expense-modal__file-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.expense-modal__file-label:hover {
+  border-color: #1890ff;
+  background-color: #f0f5ff;
+}
+
+.expense-modal__file-label i {
+  font-size: 24px;
+  color: #1890ff;
+  margin-bottom: 8px;
+}
+
+.expense-modal__file-label span {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.expense-modal__file-label small {
+  font-size: 12px;
+  color: #999;
+}
+
+.expense-modal__file-info {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+}
+
+.expense-modal__file-details {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.expense-modal__file-details i {
+  font-size: 18px;
+  color: #1890ff;
+}
+
+.expense-modal__file-name {
+  flex: 1;
+  font-size: 13px;
+  color: #333;
+  word-break: break-all;
+}
+
+.expense-modal__file-remove {
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.expense-modal__file-remove:hover {
+  background-color: #fff1f0;
+}
+
+.expense-modal__file-preview {
+  margin-top: 10px;
+  max-width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.expense-modal__file-preview img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Стили для файлового поля - в стиле модального окна */
+.expense-modal__file-area {
+  position: relative;
+  margin-top: 5px;
+}
+
+.expense-modal__file-input {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.expense-modal__file-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.expense-modal__file-label:hover {
+  border-color: #ffd966;
+  background: rgba(255, 215, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.expense-modal__file-label i {
+  font-size: 32px;
+  color: #ffd966;
+  margin-bottom: 12px;
+}
+
+.expense-modal__file-label span {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 6px;
+}
+
+.expense-modal__file-label small {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.expense-modal__file-info {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.expense-modal__file-info:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.expense-modal__file-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.expense-modal__file-details i {
+  font-size: 24px;
+  color: #ffd966;
+}
+
+.expense-modal__file-name {
+  flex: 1;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  word-break: break-all;
+  font-weight: 500;
+}
+
+.expense-modal__file-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.expense-modal__file-view,
+.expense-modal__file-remove {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.expense-modal__file-view:hover {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.3);
+  color: #ffd966;
+  transform: translateY(-2px);
+}
+
+.expense-modal__file-remove:hover {
+  background: rgba(255, 71, 87, 0.15);
+  border-color: rgba(255, 71, 87, 0.3);
+  color: #ff4757;
+  transform: translateY(-2px);
+}
+
+.expense-modal__file-view:disabled,
+.expense-modal__file-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.expense-modal__file-preview {
+  margin-top: 12px;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.expense-modal__file-preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
+
+.expense-modal__file-preview:hover img {
+  transform: scale(1.02);
+}
+
+.expense-modal__file-preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+}
+
+.expense-modal__file-preview-overlay i {
+  font-size: 32px;
+  color: #ffd966;
+}
+
+.expense-modal__file-preview-overlay span {
+  font-size: 12px;
+  color: white;
+}
+
+.expense-modal__file-preview:hover .expense-modal__file-preview-overlay {
+  opacity: 1;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 480px) {
+  .expense-modal__file-label {
+    padding: 16px;
+  }
+
+  .expense-modal__file-label i {
+    font-size: 28px;
+  }
+
+  .expense-modal__file-label span {
+    font-size: 12px;
+  }
+
+  .expense-modal__file-details {
+    flex-wrap: wrap;
+  }
+
+  .expense-modal__file-name {
+    width: 100%;
+    order: 1;
+  }
+
+  .expense-modal__file-actions {
+    order: 2;
+  }
+}

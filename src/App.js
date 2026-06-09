@@ -7,7 +7,8 @@ import ExpensesPage from "./pages/Expenses/Expenses";
 import ServicePage from "./pages/Service/Service";
 import SettingsPage from "./pages/Settings/Settings";
 import AuthPage from "./pages/Auth/Auth";
-
+import Admin from "./pages/Admin/Admin";
+import AdminAuthPage from "./pages/Admin/AdminAuthPage";
 
 const { darkAlgorithm } = theme;
 
@@ -17,6 +18,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/auth" element={<AdminAuthPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/cars" element={<CarsPage />} />
           <Route path="/expenses" element={<ExpensesPage />} />
