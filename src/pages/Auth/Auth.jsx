@@ -115,7 +115,7 @@ const AuthPage = ({ onLogin, onRegister, onForgotPassword }) => {
         >
           <div className="auth-page__logo">
             <CarOutlined />
-            <span>AutoFinance</span>
+            <span>Авто-финанс</span>
           </div>
 
           <h1 className="auth-page__info-title">

@@ -97,7 +97,7 @@ const SideBar = () => {
     <nav className="sidebar">
       <div className="sidebar-logo">
         <i className="fas fa-car-side"></i>
-        <span>AutoFinance</span>
+        <span>Авто-финанс</span>
       </div>
 
       <ul className="nav-menu">
