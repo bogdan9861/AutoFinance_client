@@ -114,7 +114,7 @@ const SideBar = () => {
               navigate(item.link);
             }}
           >
-            {item.icon}
+            <div className="sidebar-icon">{item.icon}</div>
             <span>{item.label}</span>
             {activeNav === item.id && <div className="active-indicator" />}
           </li>

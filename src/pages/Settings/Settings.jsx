@@ -193,7 +193,7 @@ const SettingsPage = ({ onUpdateProfile, onChangePassword }) => {
         })
         .catch((e) => {
           message.error(
-            `Не удалось сменить пароль; ${e.response.data.message}`
+            `Не удалось сменить пароль; ${e.response.data.message}`,
           );
         })
         .finally(() => {
@@ -251,7 +251,7 @@ const SettingsPage = ({ onUpdateProfile, onChangePassword }) => {
   };
 
   return (
-    <div className="app" style={{ flexDirection: "row", minHeight: "100vh" }}>
+    <div className="app">
       <SideBar />
       <motion.div
         className="settings-page"
