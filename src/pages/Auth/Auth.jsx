@@ -179,25 +179,6 @@ const AuthPage = ({ onLogin, onRegister, onForgotPassword }) => {
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <div className="auth-page__mode-switcher">
-            <button
-              className={`auth-page__mode-btn ${
-                mode === "login" ? "auth-page__mode-btn--active" : ""
-              }`}
-              onClick={() => switchMode("login")}
-            >
-              Вход
-            </button>
-            <button
-              className={`auth-page__mode-btn ${
-                mode === "register" ? "auth-page__mode-btn--active" : ""
-              }`}
-              onClick={() => switchMode("register")}
-            >
-              Регистрация
-            </button>
-          </div>
-
           <AnimatePresence mode="wait">
             {mode === "login" && (
               <motion.div
@@ -329,7 +310,7 @@ const AuthPage = ({ onLogin, onRegister, onForgotPassword }) => {
                             return Promise.resolve();
                           }
                           return Promise.reject(
-                            new Error("Пароли не совпадают")
+                            new Error("Пароли не совпадают"),
                           );
                         },
                       }),
@@ -353,8 +334,8 @@ const AuthPage = ({ onLogin, onRegister, onForgotPassword }) => {
                             ? Promise.resolve()
                             : Promise.reject(
                                 new Error(
-                                  "Необходимо принять условия использования"
-                                )
+                                  "Необходимо принять условия использования",
+                                ),
                               ),
                       },
                     ]}
