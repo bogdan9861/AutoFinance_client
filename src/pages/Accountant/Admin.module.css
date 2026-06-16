@@ -575,106 +575,162 @@
   border-radius: 5px;
 }
 
-/* Вкладки */
-.tabs-container {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 24px;
-  background: var(--bg-secondary, #f5f7fa);
-  padding: 6px;
-  border-radius: 16px;
-  border: 1px solid var(--border-color, #e0e0e0);
+/* Стили для файлового поля */
+.file-area {
+  position: relative;
+  margin-top: 5px;
 }
 
-.tab-btn {
-  flex: 1;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 12px;
-  background: transparent;
-  color: var(--text-secondary, #666);
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.file-input {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.file-label {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  position: relative;
-}
-
-.tab-btn:hover {
-  background: rgba(255, 255, 255, 0.5);
-  color: var(--text-primary, #333);
-}
-
-.tab-active {
-  background: white;
-  color: var(--gradient-start, #667eea);
-  box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.08));
-}
-
-.tab-active:hover {
-  background: white;
-}
-
-.tab-badge {
-  background: var(--bg-tertiary, #e8ecf1);
-  color: var(--text-secondary, #666);
-  padding: 2px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.tab-active .tab-badge {
-  background: rgba(102, 126, 234, 0.15);
-  color: var(--gradient-start, #667eea);
-}
-
-/* Бейдж роли */
-.role-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-/* Кнопка обновления */
-.refresh-btn {
-  padding: 10px 20px;
-  background: var(--bg-tertiary, #f0f0f0);
-  color: var(--text-primary, #333);
-  border: 1px solid var(--border-color, #e0e0e0);
-  border-radius: 10px;
+  padding: 24px 20px;
+  border: 2px dashed var(--input-border, #d9d9d9);
+  border-radius: 16px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
   transition: all 0.3s ease;
+  text-align: center;
+  background: var(--bg-tertiary, #fafafa);
+}
+
+.file-label:hover {
+  border-color: var(--gradient-start, #667eea);
+  background: var(--hover-bg, #f0f5ff);
+}
+
+.file-label i {
+  font-size: 32px;
+  color: var(--gradient-start, #667eea);
+  margin-bottom: 12px;
+}
+
+.file-label span {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+}
+
+.file-label small {
+  font-size: 12px;
+  color: var(--text-tertiary, #999);
+  margin-top: 4px;
+}
+
+.file-info {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: var(--bg-tertiary, #f5f5f5);
+  border-radius: 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.refresh-btn:hover:not(:disabled) {
-  background: var(--gradient-start, #667eea);
+.file-info i {
+  font-size: 18px;
+  color: var(--gradient-start, #667eea);
+}
+
+.file-info span {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary, #333);
+}
+
+.file-info small {
+  font-size: 12px;
+  color: var(--text-tertiary, #999);
+}
+
+.file-preview {
+  margin-top: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.file-preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Стили для кнопок отчетов */
+.report-btn {
+  background: #1890ff;
   color: white;
-  border-color: var(--gradient-start, #667eea);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 13px;
 }
 
-.refresh-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.report-btn:hover {
+  background: #096dd9;
+  transform: translateY(-1px);
 }
 
-/* Контейнер отчетов */
+.download-btn {
+  background: #52c41a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 13px;
+}
+
+.download-btn:hover {
+  background: #389e0d;
+  transform: translateY(-1px);
+}
+
+.existing-report {
+  margin: 15px 0;
+  padding: 15px;
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 10px;
+}
+
+.existing-report p {
+  margin: 0 0 10px 0;
+  color: #52c41a;
+  font-weight: 500;
+}
+
+.report-modal {
+  max-width: 500px;
+}
+
+/* Адаптивность для действий */
+@media (max-width: 768px) {
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .actions button {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}
+
+/* Стили для контейнера отчетов */
 .reports-container {
   display: flex;
   flex-direction: column;
@@ -682,6 +738,7 @@
   padding: 10px 0;
 }
 
+/* Группа по месяцам */
 .month-group {
   animation: fadeInUp 0.5s ease-out;
 }
@@ -723,12 +780,14 @@
   border-radius: 20px;
 }
 
+/* Сетка отчетов */
 .reports-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
 }
 
+/* Карточка отчета */
 .report-card {
   background: var(--card-bg, #ffffff);
   border-radius: 16px;
@@ -896,18 +955,18 @@
   margin-bottom: 8px;
 }
 
+.no-data span {
+  font-size: 0.9rem;
+  color: var(--text-tertiary, #999);
+}
+
+/* Модальное окно для отчета */
+.report-modal {
+  max-width: 550px;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
-  .tabs-container {
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .tab-btn {
-    justify-content: center;
-    padding: 10px 16px;
-  }
-
   .reports-grid {
     grid-template-columns: 1fr;
   }
@@ -924,156 +983,6 @@
 
   .report-actions {
     align-self: flex-end;
-  }
-}
-
-@media (max-width: 480px) {
-  .report-meta {
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .stats-cards {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Дополнительные стили для отчетов */
-
-.report-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-}
-
-.report-info h4 {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--text-primary, #333);
-  font-weight: 600;
-  word-break: break-word;
-}
-
-.file-extension {
-  display: inline-block;
-  padding: 2px 10px;
-  background: var(--bg-tertiary, #f0f0f0);
-  border-radius: 12px;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-secondary, #666);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.report-id {
-  font-family: monospace;
-  font-size: 12px;
-  color: var(--text-tertiary, #999);
-}
-
-.report-id i {
-  color: var(--text-tertiary, #999);
-}
-
-/* Улучшения для сетки отчетов */
-.reports-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.report-card {
-  background: var(--card-bg, #ffffff);
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid var(--border-color, #e0e0e0);
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.05));
-}
-
-.report-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px var(--shadow-color, rgba(0, 0, 0, 0.1));
-  border-color: var(--gradient-start, #667eea);
-}
-
-.report-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.report-title {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
-}
-
-.report-title i {
-  flex-shrink: 0;
-  margin-top: 2px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.report-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding-top: 12px;
-  margin-top: 12px;
-  border-top: 1px solid var(--border-color, #e0e0e0);
-  font-size: 0.85rem;
-  color: var(--text-secondary, #666);
-}
-
-.report-meta span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.report-meta i {
-  font-size: 0.9rem;
-  color: var(--text-tertiary, #999);
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .reports-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .report-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .report-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border-color, #e0e0e0);
-  }
-
-  .report-title {
-    align-items: center;
-  }
-
-  .report-title i {
-    width: 28px;
-    height: 28px;
-    font-size: 20px;
   }
 }
 

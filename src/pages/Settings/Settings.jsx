@@ -365,28 +365,14 @@ const SettingsPage = ({ onUpdateProfile, onChangePassword }) => {
                 </motion.button>
               </nav>
 
-              {/* Опасная зона */}
-              <div className="settings-page__danger-zone">
-                <h3 className="settings-page__danger-title">
-                  <i className="fas fa-exclamation-triangle"></i>
-                  Опасная зона
-                </h3>
-                <button
-                  style={{ marginBottom: 10 }}
-                  className="settings-page__danger-btn"
-                  onClick={onLogout}
-                >
-                  <i className="fas fa-sign-out"></i>
-                  Выйти
-                </button>
-                <button
-                  className="settings-page__danger-btn"
-                  onClick={handleDeleteAccount}
-                >
-                  <i className="fas fa-trash"></i>
-                  Удалить аккаунт
-                </button>
-              </div>
+              <button
+                style={{ marginBottom: 10 }}
+                className="settings-page__danger-btn"
+                onClick={onLogout}
+              >
+                <i className="fas fa-sign-out"></i>
+                Выйти
+              </button>
             </div>
 
             {/* Основная область с формами */}

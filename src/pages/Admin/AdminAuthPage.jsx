@@ -3,7 +3,7 @@ import { login } from "../../app/api/endpoints/user";
 import { useNavigate } from "react-router";
 import { enums } from "../../constants";
 
-import styles from "./Admin.module.css";
+import styles from "../Admin/Admin.module.css";
 import useUser from "../../hooks/useUser";
 
 const AdminAuthPage = () => {
@@ -19,10 +19,10 @@ const AdminAuthPage = () => {
   useEffect(() => {
     if (isUserLoading) return;
 
-    console.log(user);
-
     if (user?.role === "ADMIN") {
       navigate("/admin");
+    } else if (user?.role === "ACCOUNTANT") {
+      navigate("/accountant");
     }
   }, [isUserLoading]);
 
@@ -35,6 +35,9 @@ const AdminAuthPage = () => {
       .then((res) => {
         if (res.data.role === "ADMIN") {
           navigate("/admin");
+          localStorage.setItem(enums.TOKEN, res.data.token);
+        } else if (res.data.role === "ACCOUNTANT") {
+          navigate("/accountant");
           localStorage.setItem(enums.TOKEN, res.data.token);
         } else {
           setError("У вас недостаточно прав");
